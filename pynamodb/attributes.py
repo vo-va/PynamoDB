@@ -458,18 +458,18 @@ class LegacyBooleanAttribute(Attribute):
     This class allows you to continue to use that functionality.
     """
 
-    attr_type = NUMBER
+    attr_type = BOOLEAN
 
     def serialize(self, value):
         if value is None:
             return None
         elif value:
-            return json.dumps(1)
+            return True
         else:
-            return json.dumps(0)
+            return False
 
     def deserialize(self, value):
-        return bool(json.loads(value))
+        return bool(value)
 
     def get_value(self, value):
         # we need this for the period in which you are upgrading
@@ -479,7 +479,7 @@ class LegacyBooleanAttribute(Attribute):
         # BooleanAttribute and it will serialize the new fancy way
         value_to_deserialize = super(LegacyBooleanAttribute, self).get_value(value)
         if value_to_deserialize is None:
-            value_to_deserialize = json.dumps(value.get(BOOLEAN, 0))
+            value_to_deserialize = bool(value.get(NUMBER_SHORT, '0'))
         return value_to_deserialize
 
 
