@@ -469,7 +469,16 @@ class LegacyBooleanAttribute(Attribute):
             return False
 
     def deserialize(self, value):
-        return bool(value)
+        if type(value) is bool:
+            return value
+
+        tmp_value = json.loads(value)
+        if tmp_value == 0:
+            return False
+        if tmp_value == 1:
+            return True
+
+        # return bool(json.loads(value))
 
     def get_value(self, value):
         # we need this for the period in which you are upgrading
@@ -477,9 +486,11 @@ class LegacyBooleanAttribute(Attribute):
         # this can read both but serializes as Numbers
         # once you've transitioned, you can then switch back to
         # BooleanAttribute and it will serialize the new fancy way
-        value_to_deserialize = super(LegacyBooleanAttribute, self).get_value(value)
+
+        # Hardcoding type of expected value, because attr_type is used for other things
+        value_to_deserialize = value.get(NUMBER_SHORT)
         if value_to_deserialize is None:
-            value_to_deserialize = bool(value.get(NUMBER_SHORT, '0'))
+            value_to_deserialize = json.dumps(value.get(BOOLEAN, False))
         return value_to_deserialize
 
 

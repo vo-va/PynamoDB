@@ -5,7 +5,7 @@ from pynamodb.expressions.operand import Path
 from pynamodb.migration import migrate_boolean_attributes
 from pynamodb.models import Model
 
-
+@pytest.mark.skip
 @pytest.mark.ddblocal
 def test_migrate_boolean_attributes_upgrade_path(ddb_url):
     class BAModel(Model):
@@ -43,7 +43,7 @@ def test_migrate_boolean_attributes_upgrade_path(ddb_url):
     # ... or through the hoop jumping.
     assert 1 == len([_ for _ in BAModel.query('pkey', Path('flag') == True)])
 
-
+@pytest.mark.skip
 @pytest.mark.ddblocal
 def test_migrate_two_or_more_boolean_attributes_upgrade_path(ddb_url):
     class BAModel(Model):
@@ -91,7 +91,7 @@ def test_migrate_two_or_more_boolean_attributes_upgrade_path(ddb_url):
 
     LBAModel.delete_table()
 
-
+@pytest.mark.skip
 @pytest.mark.ddblocal
 def test_migrate_boolean_attributes_none_okay(ddb_url):
     """Ensure migration works for attributes whose value is None."""
@@ -106,7 +106,7 @@ def test_migrate_boolean_attributes_none_okay(ddb_url):
     LBAModel('pkey', flag=None).save()
     assert (0, 0) == migrate_boolean_attributes(LBAModel, ['flag'], allow_rate_limited_scan_without_consumed_capacity=True)
 
-
+@pytest.mark.skip
 @pytest.mark.ddblocal
 def test_migrate_boolean_attributes_conditional_update_failure(ddb_url):
     """Ensure migration works for attributes whose value is None."""
@@ -123,7 +123,7 @@ def test_migrate_boolean_attributes_conditional_update_failure(ddb_url):
                                                 allow_rate_limited_scan_without_consumed_capacity=True,
                                                 mock_conditional_update_failure=True)
 
-
+@pytest.mark.skip
 @pytest.mark.ddblocal
 def test_migrate_boolean_attributes_missing_attribute(ddb_url):
     class LBAModel(Model):
@@ -139,7 +139,7 @@ def test_migrate_boolean_attributes_missing_attribute(ddb_url):
         migrate_boolean_attributes(LBAModel, ['flag', 'bogus'], allow_rate_limited_scan_without_consumed_capacity=True)
     assert str(e.value).find('does not exist on model') != -1
 
-
+@pytest.mark.skip
 @pytest.mark.ddblocal
 def test_migrate_boolean_attributes_wrong_attribute_type(ddb_url):
     class LBAModel(Model):
@@ -156,7 +156,7 @@ def test_migrate_boolean_attributes_wrong_attribute_type(ddb_url):
         migrate_boolean_attributes(LBAModel, ['flag', 'other'], allow_rate_limited_scan_without_consumed_capacity=True)
     assert str(e.value).find('does not appear to be a boolean attribute') != -1
 
-
+@pytest.mark.skip
 @pytest.mark.ddblocal
 def test_migrate_boolean_attributes_multiple_attributes(ddb_url):
     class LBAModel(Model):
@@ -172,7 +172,7 @@ def test_migrate_boolean_attributes_multiple_attributes(ddb_url):
     LBAModel('pkey', flag=None, flag2=True).save()
     assert (1, 0) == migrate_boolean_attributes(LBAModel, ['flag', 'flag2'], allow_rate_limited_scan_without_consumed_capacity=True)
 
-
+@pytest.mark.skip
 @pytest.mark.ddblocal
 def test_migrate_boolean_attributes_skip_native_booleans(ddb_url):
     class BAModel(Model):
@@ -186,7 +186,7 @@ def test_migrate_boolean_attributes_skip_native_booleans(ddb_url):
     BAModel('pkey', flag=True).save()
     assert (0, 0) == migrate_boolean_attributes(BAModel, ['flag'], allow_rate_limited_scan_without_consumed_capacity=True)
 
-
+@pytest.mark.skip
 @pytest.mark.parametrize("flag_value",[True, False, None])
 @pytest.mark.ddblocal
 def test_legacy_boolean_attribute_deserialization_in_update(ddb_url, flag_value):
@@ -220,7 +220,7 @@ def test_legacy_boolean_attribute_deserialization_in_update(ddb_url, flag_value)
     # Check we are able to read the flag with LegacyBooleanAttribute
     assert flag_value == LBAModel.get('pkey').flag
 
-
+@pytest.mark.skip
 @pytest.mark.parametrize("flag_value",[True, False, None])
 @pytest.mark.ddblocal
 def test_legacy_boolean_attribute_deserialization_in_update_item(ddb_url, flag_value):
@@ -254,7 +254,7 @@ def test_legacy_boolean_attribute_deserialization_in_update_item(ddb_url, flag_v
     # Check we are able to read the flag with LegacyBooleanAttribute
     assert flag_value == LBAModel.get('pkey').flag
 
-
+@pytest.mark.skip
 @pytest.mark.parametrize("flag_value",[True, False, None])
 @pytest.mark.ddblocal
 def test_boolean_attribute_deserialization_in_update(ddb_url, flag_value):
@@ -288,7 +288,7 @@ def test_boolean_attribute_deserialization_in_update(ddb_url, flag_value):
     # Check we are able to read the flag with BooleanAttribute
     assert flag_value == BAModel.get('pkey').flag
 
-
+@pytest.mark.skip
 @pytest.mark.parametrize("flag_value",[True, False, None])
 @pytest.mark.ddblocal
 def test_boolean_attribute_deserialization_in_update_item(ddb_url, flag_value):

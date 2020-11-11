@@ -457,8 +457,8 @@ class TestLegacyBooleanAttribute:
         LegacyBooleanAttribute.serialize
         """
         attr = LegacyBooleanAttribute()
-        assert attr.serialize(True) == '1'
-        assert attr.serialize(False) == '0'
+        assert attr.serialize(True) == True
+        assert attr.serialize(False) == False
         assert attr.serialize(None) is None
 
 
